@@ -1,39 +1,29 @@
 mod client;
 mod payload;
+mod orientation;
 
-use std::str::FromStr;
 use thiserror::Error;
 
 pub use client::GdClient;
-
-#[derive(Debug)]
-pub enum Orientation {
-    Gauche,
-    Droite,
-    GaucheEtDroite,
-}
+pub use orientation::Orientation;
 
 #[derive(Debug, Error)]
 #[error("Couldn't parse political orientation.")]
 pub struct ParseOrientationError;
 
-impl FromStr for Orientation {
-    type Err = ParseOrientationError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            " De gauche" => Ok(Orientation::Gauche),
-            " De droite" => Ok(Orientation::Droite),
-            " Les deux" => Ok(Orientation::GaucheEtDroite),
-            _ => Err(ParseOrientationError),
-        }
-    }
-}
-
+/// Les erreurs qui peuvent arriver lors de l'interaction avec l'API.
 #[derive(Debug, Error)]
-pub enum FetchError {
+pub enum GdClientError {
+    /// Le problème est arrivé au niveau de reqwest.
+    /// Ca veut probablement dire que la requête n'a
+    /// tout simplement pas pu être envoyée ou que la réponse
+    /// n'a pas pu être reçue,
+    /// sans doute parce que le serveur est inaccessible.
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
+
+    /// Erreur renvoyée par le serveur.
+    /// Généralement, c'est un code 4XX.
     #[error("Code {code} : {message}")]
     Client { message: String, code: u32 },
 }
