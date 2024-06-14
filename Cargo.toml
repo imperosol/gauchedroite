@@ -13,3 +13,9 @@ codegen-units = 1
 [dependencies]
 clap = { version = "4.5.7", features = ["derive"] }
 tokio = { version = "1.38.0", features = ["macros", "rt-multi-thread"] }
+gdclient = { path = "./lib/gdclient"}
+
+[workspace]
+members = [
+    "lib/gdclient"
+]
