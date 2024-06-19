@@ -1,11 +1,11 @@
+pub mod cache;
 mod client;
-mod payload;
 mod orientation;
-
-use thiserror::Error;
+mod payload;
 
 pub use client::GdClient;
 pub use orientation::Orientation;
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 #[error("Couldn't parse political orientation.")]
