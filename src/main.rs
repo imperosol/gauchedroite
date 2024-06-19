@@ -1,12 +1,13 @@
 use crate::cli::GdCli;
 use clap::Parser;
+use gdclient::cache::SqliteCache;
 use gdclient::GdClient;
 
 mod cli;
 
 #[tokio::main]
 async fn main() {
-    let client = GdClient::new();
+    let mut client = GdClient::with_cache(SqliteCache::connect());
     let cli = GdCli::parse();
 
     match client.gd(&cli.input).await {

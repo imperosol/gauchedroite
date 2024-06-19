@@ -25,6 +25,7 @@ fn cache_dir() -> Option<PathBuf> {
 }
 
 /// Un cache utilisant une db sqlite.
+#[derive(Debug)]
 pub struct SqliteCache {
     conn: Connection,
 }
